@@ -46,14 +46,6 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             default=23,
             help="seed for seed_everything",
         )
-
-        parser.add_argument(
-            "--max_training_steps",
-            type=int,
-            required=False,
-            help="Number of training steps to run"
-        )
-
         parser.add_argument(
             "--token",
             type=str,
@@ -98,16 +90,15 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
         )
 
         parser.add_argument(
-            "--flip_p",
+            "--mirror_probability",
             type=float,
             required=False,
             default=0.5,
-            help="Flip Percentage "
+            help="mirror Percentage "
                  "Example: if set to 0.5, will flip (mirror) your training images 50% of the time."
                  "This helps expand your dataset without needing to include more training images."
                  "This can lead to worse results for face training since most people's faces are not perfectly symmetrical."
         )
-
         parser.add_argument(
             "--learning_rate",
             type=float,
@@ -115,7 +106,6 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             default=1.0e-06,
             help="Set the learning rate. Defaults to 1.0e-06 (0.000001).  Accepts scientific notation."
         )
-
         parser.add_argument(
             "--save_every_x_steps",
             type=int,
@@ -123,13 +113,80 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             default=0,
             help="Saves a checkpoint every x steps"
         )
-
         parser.add_argument(
             "--gpu",
             type=int,
             default=0,
             required=False,
             help="Specify a GPU other than 0 to use for training.  Multi-GPU support is not currently implemented."
+        )
+        parser.add_argument(
+            "--batch_size",
+            type=int,
+            required=False,
+            default=2,
+            help="image batch size and number of epochs to perform for iterable datasets"
+        )
+        parser.add_argument(
+            "--num_workers",
+            type=int,
+            required=False,
+            default=1,
+            help="number of workers to deploy for data preprocessing"
+        )
+        parser.add_argument(
+            "--epochs",
+            type=int,
+            required=False,
+            default=100,
+            help="total number of training iterations to perform per image in your dataset duirng training phase split"
+        )
+        parser.add_argument(
+            "--validation_iterations",
+            type=int,
+            required=False,
+            default=20,
+            help="number of validating iterations to perform per image duirng validation split"
+        )
+        parser.add_argument(
+            "--regularization_iterations",
+            type=int,
+            required=False,
+            default=5,
+            help="number of regularizing iterations to perform per image during training phase split"
+        )
+        parser.add_argument(
+            "--resolution",
+            type=int,
+            required=False,
+            default=512,
+            help="image resolution(N)^2 (N x N)"
+        )
+        parser.add_argument(
+            "--resampler",
+            type=str,
+            required=False,
+            choices=["bilinear", "bicubic", "lanczos"],
+            default="bicubic"
+        )
+        parser.add_argument(
+            "--center_crop",
+            action="store_true",
+            help="make ANY polygon your new favorite rhomboid!!!11!1"
+        )
+        parser.add_argument(
+            "--test",
+            const="test",
+            nargs="?",
+            required=False,
+            default=None
+        )
+        parser.add_argument(
+            "--accumulated_gradients",
+            type=int,
+            required=False,
+            default=1,
+            help="Number of forward pass iteration gradients to process as a single iteration: 1 global training step = (1 x accum_grad) iterations"
         )
 
         return parser
@@ -147,17 +204,26 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             seed=opt.seed,
             debug=opt.debug,
             gpu=opt.gpu,
-            max_training_steps=opt.max_training_steps,
             save_every_x_steps=opt.save_every_x_steps,
             training_images_folder_path=opt.training_images,
             regularization_images_folder_path=opt.regularization_images,
             token=opt.token,
             token_only=opt.token_only,
             class_word=opt.class_word,
-            flip_percent=opt.flip_p,
+            mirror_probability=opt.mirror_probability,
             learning_rate=opt.learning_rate,
             model_repo_id='',
             model_path=opt.training_model,
+            batch_size=opt.batch_size,
+            num_workers=opt.num_workers,
+            epochs=opt.epochs,
+            validation_iterations=opt.validation_iterations,
+            regularization_iterations=opt.regularization_iterations,
+            resolution=opt.resolution,
+            resampler=opt.resampler,
+            center_crop=opt.center_crop,
+            test=opt.test,
+            accumulated_gradients=opt.accumulated_gradients
         )
 
     return config
