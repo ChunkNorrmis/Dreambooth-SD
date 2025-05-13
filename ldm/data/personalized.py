@@ -2,7 +2,7 @@ import os
 from typing import OrderedDict
 import numpy as np
 import PIL
-from PIL import Image
+from PIL import Image, ImageEnhance
 from torch.utils.data import Dataset
 from torchvision import transforms
 from captionizer import caption_from_path, generic_captions_from_path
@@ -13,8 +13,8 @@ per_img_token_list = [
 ]
 
 class PersonalizedBase(Dataset):
-    def __init__(self,
-                  self,
+    def __init__(
+        self,
         data_root,
         set,
         repeats,
@@ -47,51 +47,55 @@ class PersonalizedBase(Dataset):
             "bicubic": Image.Resampling.BICUBIC,
             "lanczos": Image.Resampling.LANCZOS,
         }[resampler]
-        
+
         if per_image_tokens:
-            assert self.num_images < len(
-                per_img_token_list), f"Can't use per-image tokens when the training set contains more than {len(per_img_token_list)} tokens. To enable larger sets, add more tokens to 'per_img_token_list'."
+            assert self.num_images < len(per_img_token_list), f"Can't use per-image tokens when the training set contains more than {len(per_img_token_list)} tokens. To enable larger sets, add more tokens to 'per_img_token_list'."
 
         if set == "train":
             self._length = self.num_images * repeats
 
         self.flip = transforms.RandomHorizontalFlip(p=mirror_prob)
+
         if self.reg and self.coarse_class_text:
             self.reg_tokens = OrderedDict([('C', self.coarse_class_text)])
+
 
     def __len__(self):
         return self._length
 
+
     def __getitem__(self, i):
         example = {}
-        image_path = self.image_paths[i % self.num_images]
-        image = Image.open(image_path)
+        image_path = self.image_paths[i % len(self.image_paths)]
 
-       if not image.mode == "RGB":
-            image = image.convert("RGB")
-        
+        image = Image.open(image_path)
         W, H = image.width, image.height
         max = min(W, H)
+
+        if not image.mode == "RGB":
+            image = image.convert("RGB")
+
         image = self.flip(image)
-        
+
         example["caption"] = ""
-        if self.reg and self.coarse_class_text:
+        if self.reg and self.coarse_class_                                                                                                  text:
             example["caption"] = generic_captions_from_path(image_path, self.data_root, self.reg_tokens)
         else:
             example["caption"] = caption_from_path(image_path, self.data_root, self.coarse_class_text, self.placeholder_token)
-            
+
         if self.center_crop and not H == W:
             crop_dim = ((W - max) // 2, (H - max) // 2,
                         (W + max) // 2, (H + max) // 2)
             image = image.crop([crop_dim])
-                
-        if self.resolution is not None and not self.resolution >= max:
+
+        if self.resolution is not None and not [self.resolution, self.resolution] >= [W, H]:
             image = image.resize(
                 (self.resolution, self.resolution),
                 resample=self.resampler,
-                reducing_gap=3)
-            
+                reducing_gap=3
+            )
+
         image = np.array(image).astype(np.uint8)
         example["image"] = (image / 127.5 - 1.0).astype(np.float32)
-        
+
         return example
