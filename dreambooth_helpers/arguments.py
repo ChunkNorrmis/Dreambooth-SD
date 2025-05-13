@@ -163,10 +163,8 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             default="lanczos"
         )
         parser.add_argument(
-            "--center_crop",
-            type=bool,
-            required=False,
-            default=True,
+            "--no_center_crop",
+            action="store_false",
             help="makes ANY polygon your new favorite rhomboid!!!11!1"
         )
         parser.add_argument(
