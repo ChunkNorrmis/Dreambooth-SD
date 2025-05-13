@@ -1,7 +1,7 @@
 --extra-index-url https://download.pytorch.org/whl/cu118
 torch==2.3.1
 torchvison
-numpy==1.23.1
+numpy==1.26.3
 pytorch-lightning==1.7.6
 csv-logger
 torchmetrics==0.11.1
