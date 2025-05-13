@@ -56,7 +56,7 @@ class PersonalizedBase(Dataset):
 
         self.flip = transforms.RandomHorizontalFlip(p=mirror_prob)
 
-        if self.reg and self.coarse_class_text:
+        if self.reg and self.coarse_class_text is not None:
             self.reg_tokens = OrderedDict([('C', self.coarse_class_text)])
 
 
@@ -78,7 +78,7 @@ class PersonalizedBase(Dataset):
         image = self.flip(image)
 
         example["caption"] = ""
-        if self.reg and self.coarse_class_                                                                                                  text:
+        if self.reg and self.coarse_class_text is not None:
             example["caption"] = generic_captions_from_path(image_path, self.data_root, self.reg_tokens)
         else:
             example["caption"] = caption_from_path(image_path, self.data_root, self.coarse_class_text, self.placeholder_token)
