@@ -142,7 +142,6 @@ class JoePennaDreamboothConfigSchemaV1:
             if config_parsed['schema'] == 1:
                 self.saturate(
                     project_name=config_parsed['project_name'],
-                    max_training_steps=config_parsed['max_training_steps'],
                     save_every_x_steps=config_parsed['save_every_x_steps'],
                     training_images_folder_path=config_parsed['training_images_folder_path'],
                     regularization_images_folder_path=config_parsed['regularization_images_folder_path'],
