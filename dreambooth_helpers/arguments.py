@@ -45,7 +45,8 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
         parser.add_argument(
             "--token",
             type=str,
-            required=True,
+            required=False,
+            default="rock",
             help="Unique token you want to represent your trained model. Ex: firstNameLastName."
         )
 
@@ -86,7 +87,7 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             "--mirror_probability",
             type=float,
             required=False,
-            default=0.25,
+            default=0.50,
             help="mirror Percentage "
                  "Example: if set to 0.5, will flip (mirror) your training images 50% of the time."
                  "This helps expand your dataset without needing to include more training images."
