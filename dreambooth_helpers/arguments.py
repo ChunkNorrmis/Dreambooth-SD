@@ -214,7 +214,7 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             regularization_iterations=opt.regularization_iterations,
             resolution=opt.resolution,
             resampler=opt.resampler,
-            center_crop=opt.center_crop,
+            center_crop=opt.no_center_crop,
             test=opt.test,
             accumulated_gradients=opt.accumulated_gradients
         )
