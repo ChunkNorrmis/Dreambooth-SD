@@ -84,11 +84,11 @@ class PersonalizedBase(Dataset):
             example["caption"] = caption_from_path(image_path, self.data_root, self.coarse_class_text, self.placeholder_token)
 
         if self.center_crop and HGT != WDT:
-            img = np.array(image, dtype=np.uint8)
-            H, W = img.shape[0], img.shape[1]
+            image = np.array(image, dtype=np.uint8)
+            H, W = image.shape[0], image.shape[1]
             max = min(H, W)
-            img = img[(H - max) // 2:(H + max) // 2, (W - max) // 2:(W + max) // 2]
-            image = Image.fromarray(img)
+            image = image[(H - max) // 2:(H + max) // 2, (W - max) // 2:(W + max) // 2]
+            image = Image.fromarray(image)
 
         if self.resolution is not None and not [self.resolution, self.resolution] >= [WDT, HGT]:
             image = image.resize(
