@@ -95,8 +95,8 @@ class PersonalizedBase(Dataset):
     def __getitem__(self, i):
         example = {}
         image = Image.open(self.image_paths[i % self.num_images])
-        W, H = image.width, image.height
-        max = min(W, H)
+        WDT, HGT = image.width, image.height
+        max = min(WDT, HGT)
 
         if not image.mode == "RGB":
             image = image.convert("RGB")
@@ -110,12 +110,14 @@ class PersonalizedBase(Dataset):
 
         example["caption"] = text
 
-        if self.center_crop and not H == W:
-            crop_dim = ((W - max) // 2, (H - max) // 2,
-                        (W + max) // 2, (H + max) // 2)
-            image = image.crop([crop_dim])
+        if self.center_crop and HGT != WDT:
+            image = np.array(image, dtype=np.uint8)
+            H, W = image.shape[0], image.shape[1]
+            max = min(H, W)
+            image = image[(H - max) // 2:(H + max) // 2, (W - max) // 2:(W + max) // 2]
+            image = Image.fromarray(image)
 
-        if self.resolution is not None and not [self.resolution, self.resolution] >= [W, H]:
+        if self.resolution is not None and not [self.resolution, self.resolution] >= [WDT, HGT]:
             image = image.resize(
                 (self.resolution, self.resolution),
                 resample=self.resampler,
