@@ -83,7 +83,7 @@ class PersonalizedBase(Dataset):
         else:
             example["caption"] = caption_from_path(image_path, self.data_root, self.coarse_class_text, self.placeholder_token)
 
-        if self.center_crop and not HGT == WDT:
+        if self.center_crop and HGT != WDT:
             img = np.array(image, dtype=np.uint8)
             H, W = img.shape[0], img.shape[1]
             max = min(H, W)
