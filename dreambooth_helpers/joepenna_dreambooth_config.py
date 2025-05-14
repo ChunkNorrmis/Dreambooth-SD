@@ -43,7 +43,7 @@ class JoePennaDreamboothConfigSchemaV1:
         run_seed_everything: bool=True
     ):
         self.project_name = project_name
-        self._config = datetime.now(timezone.utc).strftime("%m-%d--%H-%M")
+        self._config = datetime.now(timezone.utc).strftime("%H..%M_%m-%d")
         self.project_config_filename = f"{self._config}-{self.project_name}-config.json"
         self.debug = debug
         self.gpu = gpu
@@ -172,8 +172,16 @@ class JoePennaDreamboothConfigSchemaV1:
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     def create_checkpoint_file_name(self, steps: str):
-        date_string = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H-%M-%S")
-        return f"{date_string}_{self.project_name}_{int(steps):05d}_steps.ckpt".replace(" ", "_")
+        time_hour = int(date_string = datetime.now(timezone.utc).strftime("%H"))
+        
+        if time_hour > 12:
+            time_hour = time_hour - 12
+            time_hour_minute = f"{time_hour}..{{datetime.now(timezone.utc).strftime('%M')}pm"
+        else:
+            time_hour_minute = f"{time_hour}..{{datetime.now(timezone.utc).strftime('%M')}am"
+
+        ckpt_time = f"{time_hour_minute}_{datetime.now(timezone.utc).strftime("%m-%d")}"
+        return f"{ckpt_time}--{self.project_name}_{int(steps):05d}_steps.ckpt".replace(" ", "_")
 
     def save_config_to_file(
             self,
