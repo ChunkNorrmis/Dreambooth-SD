@@ -180,7 +180,7 @@ class JoePennaDreamboothConfigSchemaV1:
         else:
             time_hour_minute = f"{time_hour}..{datetime.now(timezone.utc).strftime('%M')}am"
 
-        ckpt_time = f"{time_hour_minute}_{datetime.now(timezone.utc).strftime("%m-%d")}"
+        ckpt_time = f"{time_hour_minute}_{datetime.now(timezone.utc).strftime('%m-%d')}"
         return f"{ckpt_time}--{self.project_name}_{int(steps):05d}_steps.ckpt".replace(" ", "_")
 
     def save_config_to_file(
