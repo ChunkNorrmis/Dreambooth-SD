@@ -176,9 +176,9 @@ class JoePennaDreamboothConfigSchemaV1:
         
         if time_hour > 12:
             time_hour = time_hour - 12
-            time_hour_minute = f"{time_hour}..{{datetime.now(timezone.utc).strftime('%M')}pm"
+            time_hour_minute = f"{time_hour}..{datetime.now(timezone.utc).strftime('%M')}pm"
         else:
-            time_hour_minute = f"{time_hour}..{{datetime.now(timezone.utc).strftime('%M')}am"
+            time_hour_minute = f"{time_hour}..{datetime.now(timezone.utc).strftime('%M')}am"
 
         ckpt_time = f"{time_hour_minute}_{datetime.now(timezone.utc).strftime("%m-%d")}"
         return f"{ckpt_time}--{self.project_name}_{int(steps):05d}_steps.ckpt".replace(" ", "_")
