@@ -67,10 +67,8 @@ class PersonalizedBase(Dataset):
     def __getitem__(self, i):
         example = {}
         image_path = self.image_paths[i % len(self.image_paths)]
-
         image = Image.open(image_path)
-        WDT, HGT = , 
-
+        
         if not image.mode == "RGB":
             image = image.convert("RGB")
 
