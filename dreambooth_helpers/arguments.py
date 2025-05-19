@@ -104,7 +104,7 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             "--save_every_x_steps",
             type=int,
             required=False,
-            default=0,
+            default=1150,
             help="Saves a checkpoint every x steps"
         )
         parser.add_argument(
@@ -125,14 +125,14 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             "--num_workers",
             type=int,
             required=False,
-            default=2,
+            default=4,
             help="number of workers to deploy for data preprocessing"
         )
         parser.add_argument(
             "--epochs",
             type=int,
             required=False,
-            default=100,
+            default=77,
             help="total number of training iterations to perform per image in your dataset duirng training phase split"
         )
         parser.add_argument(
@@ -146,7 +146,7 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             "--regularization_iterations",
             type=int,
             required=False,
-            default=5,
+            default=1,
             help="number of regularizing iterations to perform per image during training phase split"
         )
         parser.add_argument(
@@ -164,8 +164,8 @@ def parse_arguments() -> JoePennaDreamboothConfigSchemaV1:
             default="lanczos"
         )
         parser.add_argument(
-            "--no_center_crop",
-            action="store_false",
+            "--center_crop",
+            action="store_true",
             help="makes ANY polygon your new favorite rhomboid!!!11!1"
         )
         parser.add_argument(
