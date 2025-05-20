@@ -172,7 +172,7 @@ class JoePennaDreamboothConfigSchemaV1:
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
     def create_checkpoint_file_name(self, steps: str):
-        time_hour = int(date_string = datetime.now(timezone.utc).strftime("%H"))
+        time_hour = int(datetime.now(timezone.utc).strftime("%H"))
         
         if time_hour > 12:
             time_hour = time_hour - 12
